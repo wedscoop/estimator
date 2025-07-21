@@ -16,9 +16,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import CONFIG from "@/config/wedding-config";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { guestNeedsExtraPhotographer } from "@/lib/utils";
 import { calculatePostProductionCharges } from "@/lib/utils";
+import { EventName } from "@/lib/utils";
 import EventPlanSummary from "@/components/EventPlanSummary";
 
 export default function WeddingEstimator() {
@@ -26,8 +27,7 @@ export default function WeddingEstimator() {
   const [events, setEvents] = useState<any[]>([]);
   const [openPopoverIndex, setOpenPopoverIndex] = useState<number | null>(null);
   const [globalLocation, setGlobalLocation] = useState(CONFIG.LOCATION_OPTIONS[0]); // default location
-
-
+  
 const getDefaultGuests = (scale: "simple" | "standard" | "grand") => {
   return scale === "simple" ? "Up to 50" : "100–350";
 };
@@ -37,8 +37,6 @@ const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 const toggleExpand = (index: number) => {
   setExpandedIndex((prev) => (prev === index ? null : index));
 };
-
-const [teamExpanded, setTeamExpanded] = useState(false);
 
 const [outsideLocation, setOutsideLocation] = useState("");
 
@@ -68,7 +66,7 @@ const loadPreset = (label: string) => {
 
   const today = new Date();
   const spacedEvents = selected.events.map((e) => {
-    const scale = CONFIG.SCALE_MAP[e.name];
+    const scale = CONFIG.SCALE_MAP[e.name as EventName];
     const defaultGuests = getDefaultGuests(scale);
 
     const dateOffset = e.dateOffset || 0;
@@ -92,7 +90,7 @@ const addEvent = () => {
     : new Date();
 
   const defaultName = CONFIG.EVENT_OPTIONS[11];
-  const defaultScale = CONFIG.SCALE_MAP[defaultName];
+  const defaultScale = CONFIG.SCALE_MAP[defaultName  as EventName];
   const defaultGuests = getDefaultGuests(defaultScale);
 
   const newEvent = {
@@ -114,7 +112,7 @@ const updateEvent = (index: number, key: string, value: any) => {
 
   // If name changed, update guest count to match scale
   if (key === "name") {
-    const scale = CONFIG.SCALE_MAP[value];
+    const scale = CONFIG.SCALE_MAP[value as EventName];
     if (scale) {
       updated[index].guests = getDefaultGuests(scale);
     }
@@ -154,7 +152,7 @@ const sendWhatsAppRequest = () => {
     return `📸 ${e.name} — ${dateStr} (${e.timeSlot})\n📍 ${e.location || globalLocation} | 👥 ${e.guests}`;
   });
 
-  let message = `Hello Wedscoop,\nI would like to book your wedding photography services.\n\nName: *${clientName}*\nLocation: *${globalLocation === "Outside Delhi/NCR" ? outsideLocation : globalLocation}*\n\n*Events:*\n${summaryLines.join('\n')}\n\nEstimated Cost: *₹${totalCost.toLocaleString("en-IN")}*\n🧾 *18% GST extra subject to billing*\n\nPlease let me know the next steps.`;
+  const message = `Hello Wedscoop,\nI would like to book your wedding photography services.\n\nName: *${clientName}*\nLocation: *${globalLocation === "Outside Delhi/NCR" ? outsideLocation : globalLocation}*\n\n*Events:*\n${summaryLines.join('\n')}\n\nEstimated Cost: *₹${totalCost.toLocaleString("en-IN")}*\n🧾 *18% GST extra subject to billing*\n\nPlease let me know the next steps.`;
 
   const encodedMsg = encodeURIComponent(message);
   window.open(`https://wa.me/7982921411?text=${encodedMsg}`, "_blank");
@@ -172,7 +170,7 @@ const sendWhatsAppRequest = () => {
   });
 
 // 🧮 Corrected Cost Calculation: merge all slots per date before 1.5x logic
-let debugCalculations: string[] = [];
+const debugCalculations: string[] = [];
 
 // Step 1: Group all events by date & slot
 const groupedByDateAndSlot: Record<string, Record<string, any[]>> = {};
@@ -208,10 +206,15 @@ const totalCost = Object.entries(groupedByDateAndSlot).reduce((total, [date, slo
   let hasGrand = false;
 
   // Step 1: Collect per-slot team sizes
-  const perSlotTeams = [];
+const perSlotTeams: {
+  candid: number;
+  traditional: number;
+  cinematic: number;
+  tradVideo: number;
+}[] = [];
 
   slotNames.forEach((slot) => {
-    let teamCounts = {
+    const teamCounts = {
       candid: 0,
       traditional: 0,
       cinematic: 0,
@@ -219,12 +222,12 @@ const totalCost = Object.entries(groupedByDateAndSlot).reduce((total, [date, slo
     };
 
     slotMap[slot].forEach((e) => {
-      const scale = CONFIG.SCALE_MAP[e.name];
+      const scale = CONFIG.SCALE_MAP[e.name as EventName];
       if (!scale) return;
 
       hasGrand = hasGrand || scale === "grand";
 
-      let team = isDestination
+      const team = isDestination
         ? CONFIG.TEAM_COMPOSITION.grand
         : CONFIG.TEAM_COMPOSITION[scale];
       if (!team) return;

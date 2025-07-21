@@ -1,4 +1,5 @@
 // wedding-config.ts
+import { EventName } from "@/lib/utils";
 const CONFIG = {
   PAGE_TITLE: "Package Builder",
 
@@ -40,20 +41,20 @@ UNIQUE_EVENTS: ["Engagement",
 
   EXTRA_PHOTO_GUEST_RANGES: ["350–500", "500–1000"],
 
-  SCALE_MAP: {
-    "Engagement": "standard",
-    "Sangeet/Cocktail": "standard",
-    "Reception": "standard",
-    "Wedding": "grand",
-    "Pre-Wedding": "simple",
-    "Haldi (Bride Side)": "simple",
-    "Haldi (Groom Side)": "simple",
-    "Haldi (Combined)": "standard",
-    "Mehndi (Bride)": "simple",
-    "Mehndi (Groom)": "simple",
-    "Mehndi (Combined)": "standard",
-	"Others": "simple"
-  },
+SCALE_MAP: {
+  "Engagement": "standard",
+  "Sangeet/Cocktail": "standard",
+  "Reception": "standard",
+  "Wedding": "grand",
+  "Pre-Wedding": "simple",
+  "Haldi (Bride Side)": "simple",
+  "Haldi (Groom Side)": "simple",
+  "Haldi (Combined)": "standard",
+  "Mehndi (Bride)": "simple",
+  "Mehndi (Groom)": "simple",
+  "Mehndi (Combined)": "standard",
+  "Others": "simple"
+} as { [key in EventName]: "simple" | "standard" | "grand" },
 
 POST_PRODUCTION_CONFIG: {
   base: 20000,

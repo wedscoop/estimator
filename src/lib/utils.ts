@@ -16,3 +16,17 @@ export function calculatePostProductionCharges(totalDays: number): number {
   const extraBlocks = Math.ceil((totalDays - stepDays) / stepDays);
   return base + extraBlocks * increment;
 }
+
+export type EventName =
+  | "Engagement"
+  | "Sangeet/Cocktail"
+  | "Reception"
+  | "Wedding"
+  | "Pre-Wedding"
+  | "Haldi (Bride Side)"
+  | "Haldi (Groom Side)"
+  | "Haldi (Combined)"
+  | "Mehndi (Bride)"
+  | "Mehndi (Groom)"
+  | "Mehndi (Combined)"
+  | "Others";

@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import CONFIG from "@/config/wedding-config";
 import { guestNeedsExtraPhotographer } from "@/lib/utils";
 import { useState } from "react";
+import { EventName } from "@/lib/utils";
 
 export default function EventPlanSummary({
   groupedBySlot,
@@ -14,6 +15,7 @@ export default function EventPlanSummary({
 }) {
   const [showTeam, setShowTeam] = useState(false); // Single toggle for all events
 
+  
   const groupedByDate = Object.entries(groupedBySlot)
     .sort(([keyA], [keyB]) => {
       const dateA = keyA.slice(0, keyA.lastIndexOf("-"));
@@ -30,7 +32,7 @@ export default function EventPlanSummary({
     .reduce((acc, [slotKey, slotEvents]) => {
       const dateStr = slotKey.slice(0, slotKey.lastIndexOf("-"));
       const slot = slotKey.slice(slotKey.lastIndexOf("-") + 1) as "day" | "evening";
-      if (!acc[dateStr]) acc[dateStr] = {};
+      if (!acc[dateStr]) acc[dateStr] = { day: [], evening: [] };
       acc[dateStr][slot] = slotEvents;
       return acc;
     }, {} as Record<string, Record<"day" | "evening", any[]>>);
@@ -45,15 +47,15 @@ export default function EventPlanSummary({
             <div className="text-base font-semibold mb-1">📅 {dateFormatted}</div>
 
             {["day", "evening"].map((slot) =>
-              slots[slot] ? (
+              slots[slot as "day" | "evening"] ? (
                 <div
                   key={slot}
                   className={compact ? "mb-2 ml-4" : "p-3 bg-muted/30 rounded border mb-3"}
                 >
                   <div className="font-medium capitalize">🕒 {slot}</div>
                   <div className="ml-4 mt-1 space-y-1">
-                    {slots[slot].map((e, i) => {
-                      const scale = CONFIG.SCALE_MAP[e.name];
+                    {slots[slot as "day" | "evening"].map((e, i) => {
+                      const scale = CONFIG.SCALE_MAP[e.name as EventName];
                       if (!scale) return null;
 
                       const team =
