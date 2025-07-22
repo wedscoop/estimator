@@ -486,15 +486,6 @@ debugCalculations.push(`🎬 Post-production charges for ${numDays} day(s): ₹$
               </ul>
             </div>
 
-            <div className="mt-6">
-              <h2 className="font-semibold text-lg">🧮 Debug Calculations</h2>
-              <ul className="list-disc list-inside text-xs text-gray-500">
-                {debugCalculations.map((line, i) => (
-                  <li key={i}>{line}</li>
-                ))}
-              </ul>
-            </div>
-
           </CardContent>
         </Card>
       )}
