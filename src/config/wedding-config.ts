@@ -57,19 +57,19 @@ SCALE_MAP: {
 } as { [key in EventName]: "simple" | "standard" | "grand" },
 
 DEFAULT_TIME_SLOTS: {
-  "Engagement": "night",
-  "Sangeet/Cocktail": "night",
-  "Reception": "night",
-  "Wedding": "night",
+  "Engagement": "evening",
+  "Sangeet/Cocktail": "evening",
+  "Reception": "evening",
+  "Wedding": "evening",
   "Pre-Wedding": "day",
   "Haldi (Bride Side)": "day",
   "Haldi (Groom Side)": "day",
   "Haldi (Combined)": "day",
-  "Mehndi (Bride)": "night",
-  "Mehndi (Groom)": "night",
-  "Mehndi (Combined)": "night",
-  "Others": "night"
-} as { [key in EventName]: "day" | "night" },
+  "Mehndi (Bride)": "evening",
+  "Mehndi (Groom)": "evening",
+  "Mehndi (Combined)": "evening",
+  "Others": "evening"
+} as { [key in EventName]: "day" | "evening" },
 
 POST_PRODUCTION_CONFIG: {
   base: 20000,
