@@ -93,11 +93,14 @@ const addEvent = () => {
   const defaultScale = CONFIG.SCALE_MAP[defaultName  as EventName];
   const defaultGuests = getDefaultGuests(defaultScale);
 
+// ✨ Get default slot
+const defaultTimeSlot = CONFIG.DEFAULT_TIME_SLOTS?.[defaultName as EventName] || "evening";
+
   const newEvent = {
     name: defaultName,
     date: newDate,
     guests: defaultGuests,
-    timeSlot: "evening",
+    timeSlot: defaultTimeSlot,
   };
 
   const updatedEvents = [...events, newEvent];
@@ -117,7 +120,12 @@ const updateEvent = (index: number, key: string, value: any) => {
       updated[index].guests = getDefaultGuests(scale);
     }
   }
-
+ // ✨ Also update default time slot when event name changes
+  const newSlot = CONFIG.DEFAULT_TIME_SLOTS?.[value as EventName];
+  if (newSlot) {
+    updated[index].timeSlot = newSlot;
+  }
+  
   setEvents(updated);
 
   if (key === "date") setOpenPopoverIndex(null);

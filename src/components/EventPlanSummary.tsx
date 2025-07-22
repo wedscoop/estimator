@@ -47,7 +47,7 @@ export default function EventPlanSummary({
             <div className="text-base font-semibold mb-1">📅 {dateFormatted}</div>
 
             {["day", "evening"].map((slot) =>
-              slots[slot as "day" | "evening"] ? (
+              slots[slot as "day" | "evening"] && slots[slot as "day" | "evening"].length > 0? (
                 <div
                   key={slot}
                   className={compact ? "mb-2 ml-4" : "p-3 bg-muted/30 rounded border mb-3"}
