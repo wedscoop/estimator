@@ -71,11 +71,13 @@ const loadPreset = (label: string) => {
 
     const dateOffset = e.dateOffset || 0;
     const timeSlot = e.timeSlot || "evening";
-
+	// Start from 6 months in the future
+	const start = new Date(today);
+	start.setMonth(start.getMonth() + 6);
     return {
       ...e,
       guests: defaultGuests,
-      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + dateOffset),
+      date: new Date(start.getFullYear(), start.getMonth(), start.getDate() + dateOffset),
       timeSlot
     };
   });
