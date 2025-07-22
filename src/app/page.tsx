@@ -359,7 +359,7 @@ debugCalculations.push(`🎬 Post-production charges for ${numDays} day(s): ₹$
           Event {idx + 1}: {e.name || "Unnamed Event"}
         </span>
         <span className="text-grey-600 text-xl">
-          {isExpanded ? "\u02C4" : "\u203A"}
+          {isExpanded ? "˄" : "›"}
         </span>
       </div>
 
